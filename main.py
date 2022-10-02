@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import datetime as dt
 
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow.python.keras.layers import Dense, Deopout, LSTM 
+from tensorflow.python.keras.layers import Dense, Dropout, LSTM 
 from tensorflow.python.keras.models import Sequential
 
 TARGET = 'INFN'
@@ -33,7 +33,18 @@ def main():
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
     model = Sequential()
-    model.add()
+    model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train.shape[1], 1)))
+    model.add(Dropout(0.2))
+    model.add(LSTM(units=50, return_sequences=True))
+    model.add(Dropout(0.2))
+    model.add(LSTM(units=50))
+    model.add(Dropout(0.2))
+    model.add(Dense(units=1))
+
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(x_train, y_train, epochs=25, batch_size=32)
+
+    
 
 
 if __name__=="__main__":
