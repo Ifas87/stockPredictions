@@ -1,4 +1,5 @@
 from pyexpat import model
+from matplotlib import test
 import pandas as pd
 import pandas_datareader as pdt
 import numpy as np
@@ -17,10 +18,12 @@ SAMPLE_END = dt.datetime(2022, 9, 1)
 def main():
     data_sample = pdt.DataReader(TARGET, 'yahoo', SAMPLE_START, SAMPLE_END)
 
+    print(data_sample)
+
     mapper = MinMaxScaler(feature_range=(0,1))
     data_sample_mapped = mapper.fit_transform(data_sample['Close'].values.reshape(-1,1))
 
-    prediction_duration = 1097
+    prediction_duration = 60
 
     x_train = []
     y_train = []
@@ -30,6 +33,7 @@ def main():
         y_train.append(data_sample_mapped[x, 0])
 
     x_train, y_train = np.array(x_train), np.array(y_train)
+    print("Thing", x_train)
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
     model = Sequential()
@@ -43,6 +47,25 @@ def main():
 
     model.compile(optimizer='adam', loss='mean_squared_error')
     model.fit(x_train, y_train, epochs=25, batch_size=32)
+
+    x_test = x_train
+    actual_prices = data_sample #x_train['Close'].values
+    
+    predicts = model.predict(x_test)
+    predicts = mapper.inverse_transform(predicts)
+    
+    plt.plot(actual_prices, color="orange", label="True")
+    plt.plot(predicts, color="blue", label="Predicted")
+    plt.title("INFN test prediction")
+    plt.xlabel('Time')
+    plt.ylabel('INFN share price')
+
+    plt.legend()
+    plt.show()
+
+
+    
+    
 
     
 
