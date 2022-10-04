@@ -1,5 +1,3 @@
-from pyexpat import model
-from matplotlib import test
 import pandas as pd
 import pandas_datareader as pdt
 import numpy as np
@@ -11,8 +9,8 @@ from tensorflow.python.keras.layers import Dense, Dropout, LSTM
 from tensorflow.python.keras.models import Sequential
 
 TARGET = 'INFN'
-SAMPLE_START = dt.datetime(2019, 1, 1)
-SAMPLE_END = dt.datetime(2022, 9, 1)
+SAMPLE_START = dt.datetime(2020, 1, 1)
+SAMPLE_END = dt.datetime(2022, 10, 1)
 
 
 def main():
@@ -48,9 +46,28 @@ def main():
     model.compile(optimizer='adam', loss='mean_squared_error')
     model.fit(x_train, y_train, epochs=25, batch_size=32)
 
-    x_test = x_train
-    actual_prices = data_sample #x_train['Close'].values
+    # Breakpoint
+
+    test_sample_start = dt.datetime(2020, 1, 1)
+    test_sample_end = dt.datetime.now()
+
+    test_data = pdt.DataReader(TARGET, 'yahoo', test_sample_start, test_sample_end)
+    actual_prices = test_data['Close'].values
+
+    total_dataset = pd.concat( (data_sample['Close'], test_data['Close']), axis=0 )
+
+    model_inputs = total_dataset[len(total_dataset) - len(test_data) - prediction_duration:].values
+    model_inputs = model_inputs.reshape(-1, 1)
+    model_inputs = mapper.transform(model_inputs)
+
+    x_test = []
+
+    for x in range(prediction_duration, len(model_inputs)):
+        x_test.append(model_inputs[x-prediction_duration:x, 0])
     
+    x_test = np.array(x_test)
+    x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+
     predicts = model.predict(x_test)
     predicts = mapper.inverse_transform(predicts)
     
@@ -64,8 +81,7 @@ def main():
     plt.show()
 
 
-    
-    
+    # Future predictions
 
     
 
