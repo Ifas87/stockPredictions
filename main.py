@@ -83,7 +83,13 @@ def main():
 
     # Future predictions
 
-    
+    rd_sample = [model_inputs[len(model_inputs) + 1 - prediction_duration:len(model_inputs+1), 0]]
+    rd_sample = np.array(rd_sample)
+    rd_sample = np.reshape(rd_sample, (rd_sample.shape[0], rd_sample.shape[1], 1))
+
+    final_val = model.predict(rd_sample)
+    final_val = mapper.inverse_transform(final_val)
+    print(final_val)
 
 
 if __name__=="__main__":
