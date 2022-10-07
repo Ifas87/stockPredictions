@@ -73,7 +73,7 @@ def main():
     
     plt.plot(actual_prices, color="orange", label="True")
     plt.plot(predicts, color="blue", label="Predicted")
-    plt.title("INFN test prediction")
+    plt.title(f" {TARGET} test prediction")
     plt.xlabel('Time')
     plt.ylabel('INFN share price')
 
