@@ -16,8 +16,6 @@ SAMPLE_END = dt.datetime(2022, 10, 1)
 def main():
     data_sample = pdt.DataReader(TARGET, 'yahoo', SAMPLE_START, SAMPLE_END)
 
-    print(data_sample)
-
     mapper = MinMaxScaler(feature_range=(0,1))
     data_sample_mapped = mapper.fit_transform(data_sample['Close'].values.reshape(-1,1))
 
@@ -31,7 +29,7 @@ def main():
         y_train.append(data_sample_mapped[x, 0])
 
     x_train, y_train = np.array(x_train), np.array(y_train)
-    print("Thing", x_train)
+    #print("Thing", x_train)
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
     model = Sequential()
@@ -59,6 +57,9 @@ def main():
     model_inputs = total_dataset[len(total_dataset) - len(test_data) - prediction_duration:].values
     model_inputs = model_inputs.reshape(-1, 1)
     model_inputs = mapper.transform(model_inputs)
+
+    print(len(total_dataset), len(test_data))
+    print(len(total_dataset) - len(test_data) - prediction_duration)
 
     x_test = []
 
@@ -90,6 +91,7 @@ def main():
     final_val = model.predict(rd_sample)
     final_val = mapper.inverse_transform(final_val)
     print(final_val)
+
 
 
 if __name__=="__main__":
