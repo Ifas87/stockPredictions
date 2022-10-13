@@ -18,9 +18,13 @@ def main():
     mapper = MinMaxScaler(feature_range=(0,1))
     data_sample_mapped = mapper.fit_transform(data_sample['Close'].values.reshape(-1,1))
 
-    
+    training_data = []
+    resulting_data = []
 
-    # prediction_duration = 200
+    graphing_data = []
+    graphing_result = []
+
+    prediction_duration = 500
 
     # x_train = []
     # y_train = []
