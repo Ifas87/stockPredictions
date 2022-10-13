@@ -24,21 +24,20 @@ def main():
     graphing_data = []
     graphing_result = []
 
+    evaluation_data = []
+    evaluation_result_data = []
+
     prediction_duration = 500
 
-    # x_train = []
-    # y_train = []
+    for x in range(prediction_duration, len(data_sample_mapped)):
+        training_data.append(data_sample_mapped[x-prediction_duration: x, 0])
+        resulting_data.append(data_sample_mapped[x, 0])
 
-    # for x in range(prediction_duration, len(data_sample_mapped)):
-    #     x_train.append(data_sample_mapped[x-prediction_duration: x, 0])
-    #     y_train.append(data_sample_mapped[x, 0])
-
-    # x_train, y_train = np.array(x_train), np.array(y_train)
-    # #print("Thing", x_train)
-    # x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+    training_data, resulting_data = np.array(training_data), np.array(resulting_data)
+    training_data = np.reshape(training_data, (training_data.shape[0], training_data.shape[1], 1))
 
     # model = Sequential()
-    # model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train.shape[1], 1)))
+    # model.add(LSTM(units=50, return_sequences=True, input_shape=(training_data.shape[1], 1)))
     # model.add(Dropout(0.2))
     # model.add(LSTM(units=50, return_sequences=True))
     # model.add(Dropout(0.2))
@@ -47,7 +46,7 @@ def main():
     # model.add(Dense(units=1))
 
     # model.compile(optimizer='adam', loss='mean_squared_error')
-    # model.fit(x_train, y_train, epochs=25, batch_size=32)
+    # model.fit(training_data, resulting_data, epochs=25, batch_size=32)
 
     # # Breakpoint
 

@@ -54,5 +54,5 @@ model_inputs = total_dataset[len(total_dataset) - len(test_data) - 500:]
 
 print(type(total_dataset))
 print(len(total_dataset) - len(test_data) - 500)
-print(total_dataset[len(total_dataset) - len(test_data) - 500:])
+print(len(total_dataset[len(total_dataset) - len(test_data) - 500:]))
 print(model_inputs)
