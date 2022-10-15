@@ -45,48 +45,46 @@ def main():
     model.add(Dropout(0.2))
     model.add(Dense(units=1))
 
-    # model.compile(optimizer='adam', loss='mean_squared_error')
-    # model.fit(training_data, resulting_data, epochs=25, batch_size=32)
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(training_data, resulting_data, epochs=25, batch_size=32)
 
-    # # Breakpoint
+    graphing_sample_start = dt.datetime(2019, 1, 1)
+    graphing_sample_end = dt.datetime.now()
 
-    # test_sample_start = dt.datetime(2020, 1, 1)
-    # test_sample_end = dt.datetime.now()
+    test_data = pdt.DataReader(TARGET, 'yahoo', graphing_sample_start, graphing_sample_end)
+    actual_prices = test_data['Close'].values
 
-    # test_data = pdt.DataReader(TARGET, 'yahoo', test_sample_start, test_sample_end)
-    # actual_prices = test_data['Close'].values
+    total_dataset = pd.concat( (data_sample['Close'], test_data['Close']), axis=0 )
 
-    # total_dataset = pd.concat( (data_sample['Close'], test_data['Close']), axis=0 )
+    model_inputs = total_dataset[len(total_dataset) - len(test_data) - prediction_duration:].values
+    model_inputs = model_inputs.reshape(-1, 1)
+    model_inputs = mapper.transform(model_inputs)
 
-    # model_inputs = total_dataset[len(total_dataset) - len(test_data) - prediction_duration:].values
-    # model_inputs = model_inputs.reshape(-1, 1)
-    # model_inputs = mapper.transform(model_inputs)
+    print(len(total_dataset), len(test_data))
+    print(len(total_dataset) - len(test_data) - prediction_duration)
 
-    # print(len(total_dataset), len(test_data))
-    # print(len(total_dataset) - len(test_data) - prediction_duration)
+    graphing_data = []
 
-    # x_test = []
-
-    # for x in range(prediction_duration, len(model_inputs)):
-    #     x_test.append(model_inputs[x-prediction_duration:x, 0])
+    for x in range(prediction_duration, len(model_inputs)):
+        graphing_data.append(model_inputs[x-prediction_duration:x, 0])
     
-    # x_test = np.array(x_test)
-    # x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+    graphing_data = np.array(graphing_data)
+    graphing_data = np.reshape(graphing_data, (graphing_data.shape[0], graphing_data.shape[1], 1))
 
-    # predicts = model.predict(x_test)
-    # predicts = mapper.inverse_transform(predicts)
+    predicts = model.predict(graphing_data)
+    predicts = mapper.inverse_transform(predicts)
     
-    # plt.plot(actual_prices, color="orange", label="True")
-    # plt.plot(predicts, color="blue", label="Predicted")
-    # plt.title(f" {TARGET} test prediction")
-    # plt.xlabel('Time')
-    # plt.ylabel('INFN share price')
+    plt.plot(actual_prices, color="orange", label="True")
+    plt.plot(predicts, color="blue", label="Predicted")
+    plt.title(f" {TARGET} test prediction")
+    plt.xlabel('Time')
+    plt.ylabel('INFN share price')
 
-    # plt.legend()
-    # plt.show()
+    plt.legend()
+    plt.show()
 
 
-    # # Future predictions
+    # # Current day predictions
 
     # rd_sample = [model_inputs[len(model_inputs) + 1 - prediction_duration:len(model_inputs+1), 0]]
     # rd_sample = np.array(rd_sample)
