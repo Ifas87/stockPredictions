@@ -22,7 +22,6 @@ def main():
     resulting_data = []
 
     graphing_data = []
-    graphing_result = []
 
     evaluation_data = []
     evaluation_result_data = []
@@ -78,7 +77,7 @@ def main():
     plt.plot(predicts, color="blue", label="Predicted")
     plt.title(f" {TARGET} test prediction")
     plt.xlabel('Time')
-    plt.ylabel('INFN share price')
+    plt.ylabel('NAT share price')
 
     plt.legend()
     plt.show()
@@ -93,6 +92,9 @@ def main():
     # final_val = model.predict(rd_sample)
     # final_val = mapper.inverse_transform(final_val)
     # print(final_val)
+
+    # results = model.evaluate(, , batch_size=128)
+    # print("test loss, test acc:", results)
 
 
 
