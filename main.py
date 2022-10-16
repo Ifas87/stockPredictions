@@ -10,7 +10,7 @@ from tensorflow.python.keras.models import Sequential
 
 TARGET = 'NAT'
 SAMPLE_START = dt.datetime(2015, 1, 3)
-SAMPLE_END = dt.datetime(2022, 10, 1)
+SAMPLE_END = dt.datetime.now()
 
 
 def main():
@@ -41,7 +41,7 @@ def main():
     model.add(Dropout(0.2))
     model.add(Dense(units=1))
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'acc'])
     model.fit(training_data, resulting_data, epochs=25, batch_size=32)
 
     graphing_sample_start = dt.datetime(2019, 1, 1)
@@ -56,31 +56,31 @@ def main():
     model_inputs = model_inputs.reshape(-1, 1)
     model_inputs = mapper.transform(model_inputs)
 
-    print(len(total_dataset), len(test_data))
-    print(len(total_dataset) - len(test_data) - prediction_duration)
+    # print(len(total_dataset), len(test_data))
+    # print(len(total_dataset) - len(test_data) - prediction_duration)
 
-    graphing_data = []
+    # graphing_data = []
 
-    for x in range(prediction_duration, len(model_inputs)):
-        graphing_data.append(model_inputs[x-prediction_duration:x, 0])
+    # for x in range(prediction_duration, len(model_inputs)):
+    #     graphing_data.append(model_inputs[x-prediction_duration:x, 0])
     
-    graphing_data = np.array(graphing_data)
-    graphing_data = np.reshape(graphing_data, (graphing_data.shape[0], graphing_data.shape[1], 1))
+    # graphing_data = np.array(graphing_data)
+    # graphing_data = np.reshape(graphing_data, (graphing_data.shape[0], graphing_data.shape[1], 1))
 
-    predicts = model.predict(graphing_data)
-    predicts = mapper.inverse_transform(predicts)
+    # predicts = model.predict(graphing_data)
+    # predicts = mapper.inverse_transform(predicts)
     
-    plt.plot(actual_prices, color="orange", label="True")
-    plt.plot(predicts, color="blue", label="Predicted")
-    plt.title(f" {TARGET} test prediction")
-    plt.xlabel('Time')
-    plt.ylabel('NAT share price')
+    # plt.plot(actual_prices, color="orange", label="True")
+    # plt.plot(predicts, color="blue", label="Predicted")
+    # plt.title(f" {TARGET} test prediction")
+    # plt.xlabel('Time')
+    # plt.ylabel('NAT share price')
 
-    plt.legend()
-    plt.show()
+    # plt.legend()
+    # plt.show()
 
 
-    # # Current day predictions
+    # Current day predictions
 
     # rd_sample = [model_inputs[len(model_inputs) + 1 - prediction_duration:len(model_inputs+1), 0]]
     # rd_sample = np.array(rd_sample)
@@ -90,11 +90,12 @@ def main():
     # final_val = mapper.inverse_transform(final_val)
     # print(final_val)
 
-    # evaluation_data = np.split(training_data, [ (0.7*len(training_data)) ])[1]
-    # evaluation_result_data = np.split(resulting_data, [ (0.7*len(resulting_data)) ])[1]
+    evaluation_data = np.split(training_data, [ int(0.6*len(training_data)) ])[1]
+    evaluation_result_data = np.split(resulting_data, [ int(0.6*len(resulting_data)) ])[1]
 
-    # results = model.evaluate(, , batch_size=128)
-    # print("test loss, test acc:", results)
+    print(len(evaluation_data), len(evaluation_result_data))
+
+    
 
 
 
