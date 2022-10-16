@@ -23,9 +23,6 @@ def main():
 
     graphing_data = []
 
-    evaluation_data = []
-    evaluation_result_data = []
-
     prediction_duration = 500
 
     for x in range(prediction_duration, len(data_sample_mapped)):
@@ -92,6 +89,9 @@ def main():
     # final_val = model.predict(rd_sample)
     # final_val = mapper.inverse_transform(final_val)
     # print(final_val)
+
+    # evaluation_data = np.split(training_data, [ (0.7*len(training_data)) ])[1]
+    # evaluation_result_data = np.split(resulting_data, [ (0.7*len(resulting_data)) ])[1]
 
     # results = model.evaluate(, , batch_size=128)
     # print("test loss, test acc:", results)
