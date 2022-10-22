@@ -15,7 +15,6 @@ SAMPLE_END = dt.datetime.now()
 
 def main():
     data_sample = pdt.DataReader(TARGET, 'yahoo', SAMPLE_START, SAMPLE_END)
-    data_sample = data_sample.sample(frac=1)
     mapper = MinMaxScaler(feature_range=(0,1))
     data_sample_mapped = mapper.fit_transform(data_sample['Close'].values.reshape(-1,1))
 
