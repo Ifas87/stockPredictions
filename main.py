@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.python.keras.layers import Dense, Dropout, LSTM 
 from tensorflow.python.keras.models import Sequential
 
-TARGET = 'NAT'
+TARGET = 'GOEV'
 SAMPLE_START = dt.datetime(2015, 1, 3)
 SAMPLE_END = dt.datetime.now()
 
